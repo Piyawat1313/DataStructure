@@ -34,7 +34,7 @@ public class Quese {
         count++;
         list[queseRear] = newItem;
     }
-    public void enQuese()throws Exception{
+    public void deQuese()throws Exception{
         if(isFullQuese()){
             throw new Exception("QueseUnderFlow");
         }
@@ -61,3 +61,4 @@ public class Quese {
         return maxQueseSize;
     }
 }
+
