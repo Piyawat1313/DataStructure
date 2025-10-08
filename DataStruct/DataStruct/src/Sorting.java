@@ -85,6 +85,32 @@ class SArr{
         }
         System.out.println();
     }
+    public void QuickSort(int L, int R){
+        int i = L;
+        int j = R;
+        int pivot, temp;
+        pivot = number[(L + R) / 2];
+        do{
+            while (number[i] < pivot) {
+                i++;
+            }
+            while (number[j] > pivot) {
+                j--;
+            }
+            if(i <= j){
+                temp = number[i];
+                number[i] = number[j];
+                number[j] = temp;
+                i++; j--;
+            }
+        } while (i <= j);
+        if(L < j){
+            QuickSort(L, j);
+        }
+        if(i < R){
+            QuickSort(i, R);
+        }        
+    }
     public void printVal(){
         System.out.println("-----------------------");
         System.out.println("insertionSort: ");
@@ -98,6 +124,12 @@ class SArr{
         System.out.println("-----------------------");
         System.out.println("ShellSort: ");
         shellSort();
+         System.out.println("-----------------------");
+        System.out.println("QuickSort: ");
+        QuickSort(0, number.length - 1);
+        for (int k = 0; k < number.length; k++) {
+            System.out.print(number[k] + " ");
+        }
     }
 }
 public class Sorting {
@@ -111,3 +143,4 @@ public class Sorting {
         sarr.printVal();
     }
 }
+
