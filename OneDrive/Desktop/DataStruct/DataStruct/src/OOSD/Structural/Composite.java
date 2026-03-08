@@ -1,11 +1,13 @@
-package Structural;
+package OOSD.Structural;
 
 import java.util.ArrayList;
 
+// tree
 interface FileItem{
     void show(String indent);
     int getSize();
 }
+// left 1
 class File implements FileItem{
     String name;
     int size;
@@ -20,6 +22,7 @@ class File implements FileItem{
         return this.size;
     }
 }
+// left 2
 class Folder implements FileItem{
     String name;
     ArrayList<FileItem>items = new ArrayList<>();

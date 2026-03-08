@@ -1,4 +1,4 @@
-package Structural;
+package OOSD.Structural;
 
 interface ModernCharger{    //สายชาจแบบใหม่
     void chargeWithUSBC();

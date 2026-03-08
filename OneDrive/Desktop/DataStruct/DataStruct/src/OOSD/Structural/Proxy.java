@@ -1,4 +1,4 @@
-package Structural;
+package OOSD.Structural;
 
 //รูปภาพ
 interface Image {

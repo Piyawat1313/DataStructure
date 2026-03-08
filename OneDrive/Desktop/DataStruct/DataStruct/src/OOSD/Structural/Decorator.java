@@ -1,4 +1,4 @@
-package Structural;
+package OOSD.Structural;
 
 interface Coffee{
     double getCost();

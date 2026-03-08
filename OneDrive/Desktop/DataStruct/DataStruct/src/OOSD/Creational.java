@@ -1,3 +1,4 @@
+package OOSD;
 
 class Singleton {
     private static Singleton instance;
@@ -188,8 +189,7 @@ public class Creational {
             System.out.println(e.getMessage());
         }
 
-        // System.out.println("============================= Adstract Factory Pattern
-        // =================================");
+        System.out.println("============================= Adstract Factory Pattern =================================");
         // สร้างโรงงานก่อน
         GUIFactory factory = new WindowsFactory();
 

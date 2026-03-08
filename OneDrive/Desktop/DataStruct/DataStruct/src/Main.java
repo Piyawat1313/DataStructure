@@ -133,28 +133,28 @@ public class Main {
             System.out.println(e.getMessage());
         }
 
-        // try {
-        // Document d1 = new Document("SaWatDee\n");
-        // Document d2 = new Document(d1); //shallow copy
-        // d2.contents.append("Alsamaraigum");
-        // System.out.println("d1: \n" + d1.contents);
-        // System.out.println();
-        // System.out.println("d2: \n" + d2.contents);
-        // System.out.println();
-        // } catch (Exception e) {
-        // System.out.println(e.getMessage());
-        // }
+        try {
+            Document d1 = new Document("SaWatDee\n");
+            Document d2 = new Document(d1); // shallow copy
+            d2.contents.append("Alsamaraigum");
+            System.out.println("d1: \n" + d1.contents);
+            System.out.println();
+            System.out.println("d2: \n" + d2.contents);
+            System.out.println();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
-        // try {
-        // Football[] footballs1 = {new Football("Ronaldo"), new Football("Messi")};
-        // Football[] football2 = java.util.Arrays.copyOf(footballs1,footballs1.length);
-        // //shallow copy Array
-        // football2[0].name = "Neymar";
-        // System.out.println("Football1: " + footballs1[0].name);
-        // System.out.println("Football2: " + football2[0].name);
-        // } catch (Exception e) {
+        try {
+            Football[] footballs1 = { new Football("Ronaldo"), new Football("Messi") };
+            Football[] football2 = java.util.Arrays.copyOf(footballs1, footballs1.length);
+            // shallow copy Array
+            football2[0].name = "Neymar";
+            System.out.println("Football1: " + footballs1[0].name);
+            System.out.println("Football2: " + football2[0].name);
+        } catch (Exception e) {
 
-        // }
+        }
 
     }
 }

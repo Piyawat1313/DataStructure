@@ -1,4 +1,4 @@
-package Structural;
+package OOSD.Structural;
 
 class TV{
     void on(){
