@@ -199,9 +199,9 @@ Turnaround = Waiting + workMs + Resource Wait + resourceMs
 
 ## 6. ตรวจก่อนส่ง
 
-- [ ] `javac *.java` ผ่านโดยไม่มี warning ที่เกี่ยวกับ concurrency
-- [ ] รันได้ครบทั้ง 7 แถวของตารางผลในเอกสารโจทย์
-- [ ] ทุกครั้งที่รัน JVM ปิดเองโดยไม่ต้องกด Ctrl+C
+- [X] `javac *.java` ผ่านโดยไม่มี warning ที่เกี่ยวกับ concurrency
+- [X] รันได้ครบทั้ง 7 แถวของตารางผลในเอกสารโจทย์
+- [X] ทุกครั้งที่รัน JVM ปิดเองโดยไม่ต้องกด Ctrl+C
 - [ ] จำนวน `JOB_COMPLETED` ใน log เท่ากับจำนวนงานใน workload เสมอ
 - [ ] `RESOURCE_ACQUIRED` กับ `RESOURCE_RELEASED` มีจำนวนเท่ากัน
 - [ ] ไม่มีช่วงใดที่ PRINTER ถูกถือเกินจำนวน permit
