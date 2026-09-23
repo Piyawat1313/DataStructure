@@ -202,11 +202,11 @@ Turnaround = Waiting + workMs + Resource Wait + resourceMs
 - [X] `javac *.java` ผ่านโดยไม่มี warning ที่เกี่ยวกับ concurrency
 - [X] รันได้ครบทั้ง 7 แถวของตารางผลในเอกสารโจทย์
 - [X] ทุกครั้งที่รัน JVM ปิดเองโดยไม่ต้องกด Ctrl+C
-- [ ] จำนวน `JOB_COMPLETED` ใน log เท่ากับจำนวนงานใน workload เสมอ
-- [ ] `RESOURCE_ACQUIRED` กับ `RESOURCE_RELEASED` มีจำนวนเท่ากัน
-- [ ] ไม่มีช่วงใดที่ PRINTER ถูกถือเกินจำนวน permit
-- [ ] สมการตรวจสอบลงตัวทุกงาน
-- [ ] ไม่มี `Thread.stop()` และไม่มีลูปที่วนเช็กเงื่อนไขซ้ำ ๆ โดยไม่พัก
+- [X] จำนวน `JOB_COMPLETED` ใน log เท่ากับจำนวนงานใน workload เสมอ
+- [X] `RESOURCE_ACQUIRED` กับ `RESOURCE_RELEASED` มีจำนวนเท่ากัน
+- [X] ไม่มีช่วงใดที่ PRINTER ถูกถือเกินจำนวน permit
+- [X] สมการตรวจสอบลงตัวทุกงาน
+- [X] ไม่มี `Thread.stop()` และไม่มีลูปที่วนเช็กเงื่อนไขซ้ำ ๆ โดยไม่พัก
 - [ ] สมาชิกทุกคนอธิบายได้ว่าโค้ดทุกส่วนทำอะไร
 
 ---
