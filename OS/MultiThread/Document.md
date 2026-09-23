@@ -121,6 +121,50 @@ Exception in thread "main" java.io.FileNotFoundException: \data\jobs_single.csv 
             PriorityBlockingQueue.size() เป็น thread-safe อยู่แล้วในตัว internal lock จัดการให้ จึงเรียกตรงๆ ได้เลยโดยไม่ต้องเพิ่ม synchronization ชั้นนอกอีกชั้น
         ```
 
+## วิธี redirect log ลงไฟล์
+1. สร้างฌฟลเดอร์ logs ภายในฌฟลเดร์ src
+2. รันคำสั่ง java Main workloads/jobs_standard.csv fcfs 3 1 2 > logs\ชื่อไฟล์.log มันจะทำการเขียนไฟล์ .log ในโฟลเดอร์ logs
+3. วิธีนับ jobCompleted ใช้คำสั่ง
+    ```bash
+    findstr /c:"JOB_COMPLETED" logs\standard_fcfs_w3.log | find /c /v ""
+    ```
+4. วิธีนับ "RESOURCE_ACQUIRED" ใช้คำสั่ง
+    ```bash
+        findstr /c:"RESOURCE_ACQUIRED" logs\standard_fcfs_w3.log | find /c /v ""
+    ```
+5. วิธีนับ RESOURCE_RELEASED
+    ```bash
+        findstr /c:"RESOURCE_RELEASED" logs\standard_fcfs_w3.log | find /c /v ""
+    ```
+6. วิธีดูว่าช่วงใดที่ PRINTER ถูกถือเกินจำนวน permit ใช้คำสั่ง
+    - เข้าไปที่โฟลเดอร์งาน 
+    ```bash
+        cd path
+    ```
+    - ตรวจสอบ
+    ```powershell
+        $log = "logs\standard_fcfs_w3.log"
+        $permits = @{ PRINTER = 1; DATABASE = 2 }   # ให้ตรงกับ argument ที่รัน
+        $cur = @{ PRINTER = 0; DATABASE = 0 }
+        $max = @{ PRINTER = 0; DATABASE = 0 }
+
+        Get-Content $log | ForEach-Object {
+        if ($_ -match 'RESOURCE_ACQUIRED\s+job=\w+ resource=(\w+)') {
+        $r = $Matches[1]; $cur[$r]++
+        if ($cur[$r] -gt $max[$r]) { $max[$r] = $cur[$r] }
+        }
+        elseif ($_ -match 'RESOURCE_RELEASED\s+job=\w+ resource=(\w+)') {
+        $cur[$Matches[1]]--
+        }
+    }
+
+    foreach ($r in "PRINTER","DATABASE") {
+        $ok = if ($max[$r] -le $permits[$r]) { "OK" } else { "เกิน!" }
+        "$r  max พร้อมกัน=$($max[$r])  permit=$($permits[$r])  $ok"
+    }
+    ```
+
+
 ## ผลที่ได้ 
 |#|Workload / Policy|Workers|Printer|DB|avg WatingTime|avg Turnaround Time|Throughput|avg RW|
 |----|-----|----|-----|-----|-----|-----|-----|-----|
