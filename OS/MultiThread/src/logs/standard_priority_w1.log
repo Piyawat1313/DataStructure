@@ -1,0 +1,104 @@
+[      18 ms] [main      ] SYSTEM_START       workload=workloads/jobs_standard.csv policy=priority workers=1 printer=1 database=2
+[      22 ms] [main      ] SYSTEM             ?????????? 10 ????
+[      27 ms] [generator ] JOB_ARRIVED        job=J01 priority=5 work=2500ms
+[      31 ms] [scheduler ] SYSTEM             job=J01 READY
+[      32 ms] [worker-1  ] JOB_STARTED        job=J01 priority=5
+[      35 ms] [monitor   ] MONITOR            ready=0 running=0 completed=0 printer=0/1  database=0/2
+[     140 ms] [generator ] JOB_ARRIVED        job=J02 priority=5 work=2400ms resource=PRINTER(1200ms)
+[     143 ms] [scheduler ] SYSTEM             job=J02 READY
+[     228 ms] [generator ] JOB_ARRIVED        job=J03 priority=5 work=2500ms
+[     228 ms] [scheduler ] SYSTEM             job=J03 READY
+[     327 ms] [generator ] JOB_ARRIVED        job=J04 priority=5 work=2400ms resource=DATABASE(1000ms)
+[     327 ms] [scheduler ] SYSTEM             job=J04 READY
+[     427 ms] [generator ] JOB_ARRIVED        job=J05 priority=5 work=2500ms resource=PRINTER(1200ms)
+[     428 ms] [scheduler ] SYSTEM             job=J05 READY
+[     528 ms] [generator ] JOB_ARRIVED        job=J06 priority=4 work=2400ms resource=DATABASE(1000ms)
+[     528 ms] [scheduler ] SYSTEM             job=J06 READY
+[    1027 ms] [generator ] JOB_ARRIVED        job=J07 priority=1 work=700ms resource=PRINTER(900ms)
+[    1027 ms] [scheduler ] SYSTEM             job=J07 READY
+[    1035 ms] [monitor   ] MONITOR            ready=6 running=0 completed=0 printer=0/1  database=0/2
+[    1235 ms] [generator ] JOB_ARRIVED        job=J08 priority=1 work=600ms resource=PRINTER(900ms)
+[    1235 ms] [scheduler ] SYSTEM             job=J08 READY
+[    1427 ms] [generator ] JOB_ARRIVED        job=J09 priority=1 work=700ms resource=DATABASE(900ms)
+[    1428 ms] [scheduler ] SYSTEM             job=J09 READY
+[    1628 ms] [generator ] JOB_ARRIVED        job=J10 priority=2 work=600ms
+[    1628 ms] [scheduler ] SYSTEM             job=J10 READY
+[    2046 ms] [monitor   ] MONITOR            ready=10 running=0 completed=0 printer=0/1  database=0/2
+[    2534 ms] [worker-1  ] WORK_FINISHED      job=J01
+[    2534 ms] [worker-1  ] JOB_COMPLETED      job=J01
+[    2534 ms] [worker-1  ] JOB_STARTED        job=J07 priority=1
+[    3056 ms] [monitor   ] MONITOR            ready=9 running=0 completed=1 printer=0/1  database=0/2
+[    3244 ms] [worker-1  ] WORK_FINISHED      job=J07
+[    3251 ms] [worker-1  ] RESOURCE_WAIT      job=J07 resource=PRINTER
+[    3255 ms] [worker-1  ] RESOURCE_ACQUIRED  job=J07 resource=PRINTER waited=6ms
+[    4063 ms] [monitor   ] MONITOR            ready=9 running=0 completed=1 printer=1/1  database=0/2
+[    4161 ms] [worker-1  ] RESOURCE_RELEASED  job=J07 resource=PRINTER
+[    4161 ms] [worker-1  ] JOB_COMPLETED      job=J07
+[    4161 ms] [worker-1  ] JOB_STARTED        job=J08 priority=1
+[    4767 ms] [worker-1  ] WORK_FINISHED      job=J08
+[    4767 ms] [worker-1  ] RESOURCE_WAIT      job=J08 resource=PRINTER
+[    4767 ms] [worker-1  ] RESOURCE_ACQUIRED  job=J08 resource=PRINTER waited=0ms
+[    5063 ms] [monitor   ] MONITOR            ready=8 running=0 completed=2 printer=1/1  database=0/2
+[    5674 ms] [worker-1  ] RESOURCE_RELEASED  job=J08 resource=PRINTER
+[    5674 ms] [worker-1  ] JOB_COMPLETED      job=J08
+[    5674 ms] [worker-1  ] JOB_STARTED        job=J09 priority=1
+[    6064 ms] [monitor   ] MONITOR            ready=7 running=0 completed=3 printer=0/1  database=0/2
+[    6378 ms] [worker-1  ] WORK_FINISHED      job=J09
+[    6378 ms] [worker-1  ] RESOURCE_WAIT      job=J09 resource=DATABASE
+[    6378 ms] [worker-1  ] RESOURCE_ACQUIRED  job=J09 resource=DATABASE waited=0ms
+[    7066 ms] [monitor   ] MONITOR            ready=7 running=0 completed=3 printer=0/1  database=1/2
+[    7291 ms] [worker-1  ] RESOURCE_RELEASED  job=J09 resource=DATABASE
+[    7291 ms] [worker-1  ] JOB_COMPLETED      job=J09
+[    7291 ms] [worker-1  ] JOB_STARTED        job=J10 priority=2
+[    7894 ms] [worker-1  ] WORK_FINISHED      job=J10
+[    7894 ms] [worker-1  ] JOB_COMPLETED      job=J10
+[    7894 ms] [worker-1  ] JOB_STARTED        job=J06 priority=4
+[    8071 ms] [monitor   ] MONITOR            ready=5 running=0 completed=5 printer=0/1  database=0/2
+[    9080 ms] [monitor   ] MONITOR            ready=5 running=0 completed=5 printer=0/1  database=0/2
+[   10081 ms] [monitor   ] MONITOR            ready=5 running=0 completed=5 printer=0/1  database=0/2
+[   10297 ms] [worker-1  ] WORK_FINISHED      job=J06
+[   10297 ms] [worker-1  ] RESOURCE_WAIT      job=J06 resource=DATABASE
+[   10297 ms] [worker-1  ] RESOURCE_ACQUIRED  job=J06 resource=DATABASE waited=0ms
+[   11082 ms] [monitor   ] MONITOR            ready=5 running=0 completed=5 printer=0/1  database=1/2
+[   11297 ms] [worker-1  ] RESOURCE_RELEASED  job=J06 resource=DATABASE
+[   11298 ms] [worker-1  ] JOB_COMPLETED      job=J06
+[   11298 ms] [worker-1  ] JOB_STARTED        job=J02 priority=5
+[   12083 ms] [monitor   ] MONITOR            ready=4 running=0 completed=6 printer=0/1  database=0/2
+[   13090 ms] [monitor   ] MONITOR            ready=4 running=0 completed=6 printer=0/1  database=0/2
+[   13706 ms] [worker-1  ] WORK_FINISHED      job=J02
+[   13706 ms] [worker-1  ] RESOURCE_WAIT      job=J02 resource=PRINTER
+[   13706 ms] [worker-1  ] RESOURCE_ACQUIRED  job=J02 resource=PRINTER waited=0ms
+[   14093 ms] [monitor   ] MONITOR            ready=4 running=0 completed=6 printer=1/1  database=0/2
+[   14914 ms] [worker-1  ] RESOURCE_RELEASED  job=J02 resource=PRINTER
+[   14915 ms] [worker-1  ] JOB_COMPLETED      job=J02
+[   14915 ms] [worker-1  ] JOB_STARTED        job=J03 priority=5
+[   15096 ms] [monitor   ] MONITOR            ready=3 running=0 completed=7 printer=0/1  database=0/2
+[   16096 ms] [monitor   ] MONITOR            ready=3 running=0 completed=7 printer=0/1  database=0/2
+[   17110 ms] [monitor   ] MONITOR            ready=3 running=0 completed=7 printer=0/1  database=0/2
+[   17418 ms] [worker-1  ] WORK_FINISHED      job=J03
+[   17418 ms] [worker-1  ] JOB_COMPLETED      job=J03
+[   17418 ms] [worker-1  ] JOB_STARTED        job=J04 priority=5
+[   18110 ms] [monitor   ] MONITOR            ready=2 running=0 completed=8 printer=0/1  database=0/2
+[   19121 ms] [monitor   ] MONITOR            ready=2 running=0 completed=8 printer=0/1  database=0/2
+[   19833 ms] [worker-1  ] WORK_FINISHED      job=J04
+[   19833 ms] [worker-1  ] RESOURCE_WAIT      job=J04 resource=DATABASE
+[   19833 ms] [worker-1  ] RESOURCE_ACQUIRED  job=J04 resource=DATABASE waited=0ms
+[   20123 ms] [monitor   ] MONITOR            ready=2 running=0 completed=8 printer=0/1  database=1/2
+[   20835 ms] [worker-1  ] RESOURCE_RELEASED  job=J04 resource=DATABASE
+[   20835 ms] [worker-1  ] JOB_COMPLETED      job=J04
+[   20835 ms] [worker-1  ] JOB_STARTED        job=J05 priority=5
+[   21132 ms] [monitor   ] MONITOR            ready=1 running=0 completed=9 printer=0/1  database=0/2
+[   22134 ms] [monitor   ] MONITOR            ready=1 running=0 completed=9 printer=0/1  database=0/2
+[   23145 ms] [monitor   ] MONITOR            ready=1 running=0 completed=9 printer=0/1  database=0/2
+[   23337 ms] [worker-1  ] WORK_FINISHED      job=J05
+[   23337 ms] [worker-1  ] RESOURCE_WAIT      job=J05 resource=PRINTER
+[   23337 ms] [worker-1  ] RESOURCE_ACQUIRED  job=J05 resource=PRINTER waited=0ms
+[   24150 ms] [monitor   ] MONITOR            ready=1 running=0 completed=9 printer=1/1  database=0/2
+[   24548 ms] [worker-1  ] RESOURCE_RELEASED  job=J05 resource=PRINTER
+[   24548 ms] [worker-1  ] JOB_COMPLETED      job=J05
+[   24549 ms] [worker-1  ] SYSTEM             worker-1 finished, no more jobs
+Average Waiting Time: 8505.00 ms
+Average Turnaround Time: 10957.00 ms
+Throughput: 0.41 jobs/sec
+Average Resource Wait Time: 0.00 ms
+[   24551 ms] [main      ] SYSTEM_STOP        completed=10/10
