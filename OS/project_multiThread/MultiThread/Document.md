@@ -40,7 +40,7 @@ Exception in thread "main" java.io.FileNotFoundException: \data\jobs_single.csv 
 ## คำถามเน้นความเข้าใจ
 1. ใช้เวลาจากนาฬิกาตัวไหน (ดู ProjectLogger.now() ซึ่งให้เวลาฐานเดียวกับที่ปรากฏใน log ทำให้ค่าที่วัดกับ log ตรวจสอบกันได้)
     - ANS: ใช้ ProjectLogger.now() เพียงตัวเดียวตลอดทั้งโปรแกรม
-    - เหตุผล: ถ้าใช้ System.nanoTime()ในโค้ดแต่ log พิมนาฬิกาอีกตัวตัวเลขสองชุดนี้จะเทียบกันไม่ได้โดยครงเพราะใช้นาฬิกาคนละตัว
+    - เหตุผล: ถ้าใช้ System.nanoTime()ในโค้ดแต่ log พิมนาฬิกาอีกตัวตัวเลขสองชุดนี้จะเทียบกันไม่ได้โดยตรงเพราะใช้นาฬิกาคนละตัว
     - สิ่งที่ต้องทำ: ทุกจุดที่ต้องบันทึกเวลาต้องเรียก ProjectLogger.now() เก็บค่านั้นไว้ ห้ามเรียกนาฬิกาของ JVM โดยตรง
 
 2. ฟิลด์ใดถูกเขียนโดย Thread หนึ่งแล้วอ่านโดยอีก Thread หนึ่งและต้องป้องกันอย่างไร
@@ -153,19 +153,6 @@ Exception in thread "main" java.io.FileNotFoundException: \data\jobs_single.csv 
 
         สำเร็จ → ได้ permit ไป 1 หน่วยแน่นอน
         ล้มเหลว (throw exception) → ไม่ได้ permit อะไรเลย ไม่มีอะไรค้างให้ต้องคืน    
-        ```
-
-12. ทำไม Semaphore ต้องสร้างด้วย fair = true ถ้าเปลี่ยนเป็น false ผลการทดลองข้อ 12C จะผิดเพี้ยนยังไง
-    - ANS:
-        ```text
-
-        ```
-
-## คำถามเน้น Code
-8. แก้บั๊ก running count: ให้เพิ่ม parameter AtomicInteger runningCount เข้า Worker และแก้ processJob ให้ increment ตอนเริ่มงาน, decrement ตอนจบงาน แบบ thread-safe
-    - ANS:
-        ```java
-
         ```
 
 ## วิธี redirect log ลงไฟล์
@@ -332,9 +319,99 @@ Exception in thread "main" java.io.FileNotFoundException: \data\jobs_single.csv 
 
             ตัว algorithm/tie-break rule ยังคง deterministic เป๊ะ — ถ้า Job สอง priority เท่ากันมาถึง Ready Queue พร้อมกัน กติกา tie-break (จาก sequence) จะเลือกตัวเดิมเสมอไม่ว่ารันกี่รอบ สิ่งที่ไม่ deterministic คือ "เวลา" ที่แต่ละ event เกิดขึ้น ไม่ใช่ "ผลลัพธ์ของกติกา"
         ```
-| |แถว2|แถว 7|ผลต่าง|
-|----|-----|----|----|
-|avg WT|2325.00|2339|14 ms|
-|avg TAT|4958.00|4982|24 ms|
-|Throughput|1.08|1.08|0 ms|
-|avg RW|265.00|264.00|1 ms|
+    - ตารางเปรียบเทียบ
+        | |แถว2|แถว 7|ผลต่าง|
+        |----|-----|----|----|
+        |avg WT|2325.00|2339|14 ms|
+        |avg TAT|4958.00|4982|24 ms|
+        |Throughput|1.08|1.08|0 ms|
+        |avg RW|265.00|264.00|1 ms|
+
+## Poison pill
+- หลักการ:
+    ```text
+        สร้างค่าพิเศษใส่เข้าไปในคิวเดียวกับงานจริง เมื่อ Worker ดึงมาเจอค่านี้ แปลว่า "ไม่มีงานให้ทำอีกแล้ว หยุดได้"
+    ```
+- code
+    ```java
+        Job job = readyQueue.take();
+        if (job == Job.POISON_PILL) {
+            readyQueue.close();  // ส่งต่อให้ Worker ตัวถัดไป (relay)
+            break;
+        }
+    ```
+
+- ข้อดี:
+    ```text
+        ไม่ต้องมี mechanism แยกต่างหาก ใช้ queue เดิมที่มีอยู่แล้ว, Worker หยุดตัวเองตามธรรมชาติเมื่อคิวว่างพอดี
+    ```
+- ข้อเสีย: 
+    ```text
+        ต้องออกแบบ comparator ให้ pill อยู่ท้ายคิวเสมอ ต้องคิดเรื่อง "relay" ให้ทุก Worker ได้รับสัญญาณ ใส่ pill กลับเข้าคิวทุกครั้งที่เจอ
+    ```
+
+## CountDownLatch
+- หลักการ:
+    ```text
+        สร้าง latch ด้วยตัวเลขนับถอยหลังโดย N = จำนวน Job ทั้งหมด ทุกครั้งที่ Job เสร็จให้เรียก countDown() ฝั่ง Main เรียก latch.await() ซึ่งจะ block อยู่จนกว่าตัวนับจะถึง 0
+    ```
+- code
+    ```java
+        CountDownLatch latch = new CountDownLatch(jobs.size());
+        // ส่ง latch เข้า Worker ผ่าน constructor
+
+        // ใน Worker.processJob() ท้ายสุด
+        statistics.recordCompletion(job);
+        logger.jobCompleted(job);
+        latch.countDown(); 
+
+        latch.await();   // block จนกว่า Job ครบทุกตัว countDown หมด
+    ```
+
+- ปัญหาที่ตามมา:
+    ```text
+        latch.await() รู้แค่ว่า "งานเสร็จครบหมดแล้ว" แต่ไม่ได้บอก Worker ให้หยุดทำงาน Worker ก็ยังต้องมีกลไกแยกต่างหากเพื่อรู้ว่า "ควรเลิกรอ take() แล้ว
+
+        วิธีนี้ ต้องผสมกับอย่างอื่น เช่น flag volatile boolean shutdown หรือใช้ readyQueue.poll(timeout) แทน take() แบบ block ตลอดไป
+    ```
+- codeผสมกับอย่างอื่น:
+    ```java
+        // Worker ต้องเปลี่ยนจาก take() เป็น poll แบบมี timeout เพื่อเช็ค flag เป็นระยะ
+        while (!shutdownRequested) {
+            Job job = readyQueue.poll(200, TimeUnit.MILLISECONDS);
+            if (job == null) continue;  // timeout ไป เช็ค flag ใหม่
+            processJob(job);
+        }
+    ```
+- ข้อเสีย: 
+    ```text
+        poll(timeout) แบบนี้เป็น polling แบบมี delay ไม่ใช่ pure blocking แบบ take()
+    ```
+
+## lock
+- หลักการ: 
+    ```text
+        ใช้ AtomicInteger (หรือ synchronized counter) นับ "จำนวนงานที่ยังไม่เสร็จ" increment ตอน JobGenerator ปล่อยงานเข้าระบบ, decrement ตอน Worker ทำ Job เสร็จ เมื่อค่าถึง 0 แปลว่างานหมดจริงๆ
+    ```
+- code:
+    ```java
+    AtomicInteger pending = new AtomicInteger(0);
+
+    // JobGenerator: ทุกครั้งที่ปล่อยงาน
+    pending.incrementAndGet();
+    arrivalQueue.put(job);
+
+    // Worker: ทุกครั้งที่ processJob เสร็จ
+    statistics.recordCompletion(job);
+    if (pending.decrementAndGet() == 0) {
+        // เป็นคนสุดท้ายที่ทำให้ตัวนับถึง 0 → signal ให้ทุกอย่างหยุด
+        for (int i = 0; i < numWorkers; i++) {
+            readyQueue.close();  // ยังต้องพึ่ง poison pill relay อยู่ดี เพื่อปลุก Worker ที่ block อยู่ใน take()
+        }
+    }
+    ```
+
+- จุดที่ควรรู้:
+    ```text
+        วิธีนี้ก็ ยังต้องพึ่งกลไกปลุก Worker ที่ block อยู่ใน take() อยู่ดี เพราะ Worker ตัวสุดท้ายที่กำลัง take() ค้างอยู่เฉยๆ ไม่มีทางรู้ตัวว่าตัวนับถึง 0 แล้ว ถ้าไม่มีใครไป "ปลุก"
+    ```
