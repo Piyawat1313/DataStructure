@@ -1,0 +1,63 @@
+[      26 ms] [main      ] SYSTEM_START       workload=workloads/jobs_printer.csv policy=priority workers=3 printer=2 database=2
+[      32 ms] [main      ] SYSTEM             ?????????? 6 ????
+[      39 ms] [generator ] JOB_ARRIVED        job=P01 priority=2 work=250ms resource=PRINTER(1200ms)
+[      43 ms] [scheduler ] SYSTEM             job=P01 READY
+[      45 ms] [worker-1  ] JOB_STARTED        job=P01 priority=2
+[      50 ms] [monitor   ] MONITOR            ready=0 running=0 completed=0 printer=0/2  database=0/2
+[     140 ms] [generator ] JOB_ARRIVED        job=P02 priority=1 work=300ms resource=PRINTER(1200ms)
+[     140 ms] [scheduler ] SYSTEM             job=P02 READY
+[     140 ms] [worker-3  ] JOB_STARTED        job=P02 priority=1
+[     240 ms] [generator ] JOB_ARRIVED        job=P03 priority=3 work=250ms resource=PRINTER(1200ms)
+[     241 ms] [scheduler ] SYSTEM             job=P03 READY
+[     241 ms] [worker-2  ] JOB_STARTED        job=P03 priority=3
+[     296 ms] [worker-1  ] WORK_FINISHED      job=P01
+[     300 ms] [worker-1  ] RESOURCE_WAIT      job=P01 resource=PRINTER
+[     305 ms] [worker-1  ] RESOURCE_ACQUIRED  job=P01 resource=PRINTER waited=5ms
+[     340 ms] [generator ] JOB_ARRIVED        job=P04 priority=2 work=300ms resource=PRINTER(1200ms)
+[     341 ms] [scheduler ] SYSTEM             job=P04 READY
+[     439 ms] [generator ] JOB_ARRIVED        job=P05 priority=1 work=250ms resource=PRINTER(1200ms)
+[     440 ms] [scheduler ] SYSTEM             job=P05 READY
+[     441 ms] [worker-3  ] WORK_FINISHED      job=P02
+[     441 ms] [worker-3  ] RESOURCE_WAIT      job=P02 resource=PRINTER
+[     441 ms] [worker-3  ] RESOURCE_ACQUIRED  job=P02 resource=PRINTER waited=0ms
+[     492 ms] [worker-2  ] WORK_FINISHED      job=P03
+[     492 ms] [worker-2  ] RESOURCE_WAIT      job=P03 resource=PRINTER
+[     540 ms] [generator ] JOB_ARRIVED        job=P06 priority=3 work=300ms resource=PRINTER(1200ms)
+[     540 ms] [scheduler ] SYSTEM             job=P06 READY
+[    1051 ms] [monitor   ] MONITOR            ready=4 running=0 completed=0 printer=2/2  database=0/2
+[    1509 ms] [worker-2  ] RESOURCE_ACQUIRED  job=P03 resource=PRINTER waited=1017ms
+[    1510 ms] [worker-1  ] RESOURCE_RELEASED  job=P01 resource=PRINTER
+[    1510 ms] [worker-1  ] JOB_COMPLETED      job=P01
+[    1510 ms] [worker-1  ] JOB_STARTED        job=P05 priority=1
+[    1643 ms] [worker-3  ] RESOURCE_RELEASED  job=P02 resource=PRINTER
+[    1643 ms] [worker-3  ] JOB_COMPLETED      job=P02
+[    1643 ms] [worker-3  ] JOB_STARTED        job=P04 priority=2
+[    1773 ms] [worker-1  ] WORK_FINISHED      job=P05
+[    1774 ms] [worker-1  ] RESOURCE_WAIT      job=P05 resource=PRINTER
+[    1774 ms] [worker-1  ] RESOURCE_ACQUIRED  job=P05 resource=PRINTER waited=0ms
+[    1946 ms] [worker-3  ] WORK_FINISHED      job=P04
+[    1946 ms] [worker-3  ] RESOURCE_WAIT      job=P04 resource=PRINTER
+[    2054 ms] [monitor   ] MONITOR            ready=2 running=0 completed=2 printer=2/2  database=0/2
+[    2717 ms] [worker-2  ] RESOURCE_RELEASED  job=P03 resource=PRINTER
+[    2717 ms] [worker-3  ] RESOURCE_ACQUIRED  job=P04 resource=PRINTER waited=771ms
+[    2717 ms] [worker-2  ] JOB_COMPLETED      job=P03
+[    2717 ms] [worker-2  ] JOB_STARTED        job=P06 priority=3
+[    2985 ms] [worker-1  ] RESOURCE_RELEASED  job=P05 resource=PRINTER
+[    2985 ms] [worker-1  ] JOB_COMPLETED      job=P05
+[    2986 ms] [worker-1  ] SYSTEM             worker-1 finished, no more jobs
+[    3017 ms] [worker-2  ] WORK_FINISHED      job=P06
+[    3018 ms] [worker-2  ] RESOURCE_WAIT      job=P06 resource=PRINTER
+[    3018 ms] [worker-2  ] RESOURCE_ACQUIRED  job=P06 resource=PRINTER waited=0ms
+[    3064 ms] [monitor   ] MONITOR            ready=1 running=0 completed=4 printer=2/2  database=0/2
+[    3917 ms] [worker-3  ] RESOURCE_RELEASED  job=P04 resource=PRINTER
+[    3918 ms] [worker-3  ] JOB_COMPLETED      job=P04
+[    3918 ms] [worker-3  ] SYSTEM             worker-3 finished, no more jobs
+[    4072 ms] [monitor   ] MONITOR            ready=1 running=0 completed=5 printer=1/2  database=0/2
+[    4228 ms] [worker-2  ] RESOURCE_RELEASED  job=P06 resource=PRINTER
+[    4228 ms] [worker-2  ] JOB_COMPLETED      job=P06
+[    4228 ms] [worker-2  ] SYSTEM             worker-2 finished, no more jobs
+Average Waiting Time: 758.00 ms
+Average Turnaround Time: 2543.00 ms
+Throughput: 1.43 jobs/sec
+Average Resource Wait Time: 298.00 ms
+[    4231 ms] [main      ] SYSTEM_STOP        completed=6/6
