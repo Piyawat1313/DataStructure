@@ -1,5 +1,3 @@
-# Mini Job Scheduler — [ชื่อกลุ่ม]
-
 ## วิธี Compile / Run
 ```bash
 cd src
