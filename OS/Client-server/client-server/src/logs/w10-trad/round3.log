@@ -1,0 +1,13 @@
+Files on server:
+ FILE test.bin 1073741824
+worker 0: offset=0 length=107374182
+worker 1: offset=107374182 length=107374182
+worker 2: offset=214748364 length=107374182
+worker 3: offset=322122546 length=107374182
+worker 4: offset=429496728 length=107374182
+worker 5: offset=536870910 length=107374182
+worker 6: offset=644245092 length=107374182
+worker 7: offset=751619274 length=107374182
+worker 8: offset=858993456 length=107374182
+worker 9: offset=966367638 length=107374186
+RESULT mode=Traditional works=10  time=1.325s throughput=772.96MB/s size_ok=true sha256=49bc20df15e412a64472421e13fe86ff1c5165e18b2afccf160d4dc19fe68a14
