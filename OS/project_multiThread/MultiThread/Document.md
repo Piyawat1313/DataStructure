@@ -155,6 +155,21 @@ Exception in thread "main" java.io.FileNotFoundException: \data\jobs_single.csv 
         ล้มเหลว (throw exception) → ไม่ได้ permit อะไรเลย ไม่มีอะไรค้างให้ต้องคืน    
         ```
 
+12. ถ้าเปลี่ยนโครงสร้าง JobGenarator.java โดยการ Implements Runnable ต้องแก้จุดไหนบ้าง
+    - ANS: 
+        ```text, java
+            แก้ไขไฟล์ JobGenaerator.java ให้ทำการ Implements 
+            เอา super() ออกจาก constructor
+
+            แก้ที่ Main.java โดย code นี้
+                JobGenerator jobGenerator = new JobGenerator(jobs, logger, arrivalQueue, simulationStart);
+                Thread gen = new Thread(jobGenerator, "generator");
+                gen.start();
+
+            รอจนกว่างานทั้ง jobs.size() ชิ้นจะเสร็จ ต้องแก้เป็น 
+                joinAll(gen, scheduler);
+        ```
+
 ## วิธี redirect log ลงไฟล์
 1. สร้างฌฟลเดอร์ logs ภายในฌฟลเดร์ src
 2. รันคำสั่ง java Main workloads/jobs_standard.csv fcfs 3 1 2 > logs\ชื่อไฟล์.log มันจะทำการเขียนไฟล์ .log ในโฟลเดอร์ logs
@@ -414,4 +429,31 @@ Exception in thread "main" java.io.FileNotFoundException: \data\jobs_single.csv 
 - จุดที่ควรรู้:
     ```text
         วิธีนี้ก็ ยังต้องพึ่งกลไกปลุก Worker ที่ block อยู่ใน take() อยู่ดี เพราะ Worker ตัวสุดท้ายที่กำลัง take() ค้างอยู่เฉยๆ ไม่มีทางรู้ตัวว่าตัวนับถึง 0 แล้ว ถ้าไม่มีใครไป "ปลุก"
+    ```
+
+
+## เกร็ดความรู้
+- Comparator: Functional Interface กำหนดเกณฑ์การเปรียบเทียบและการจัดเรียง Objects 2 ชึ้น
+
+- BlockingQueue: Queue อินเทอร์เฟซที่ออกแบบมาสำหรับงาน Multithreading เพิ่มความสามารถในการรอ อัตโนมัติเมื่อคิวว่าง 
+
+
+## Code สำรองกรณีต้องแก้ 
+#### ReadyQueue.java
+```java
+if (policy == Config.Policy.FCFS) {
+    base = Comparator.comparingInt(Job -> Job.sequence);
+}
+else{
+    base = Comparator
+                .comparingInt((Job job) -> job.priority)
+                .thenComparingInt(job -> job.sequence);
+}
+```
+- คำอธิบาย
+    ```text
+        FCFS เรียงตาม sequence (ลำดับในไฟล์) ไม่ใช่ลำดับที่งานมาถึงจริง
+        ถ้า CSV ไม่ได้เรียงตาม arrivalMs (โจทย์บอกชัดว่าไม่ได้เรียง) งานที่อยู่บรรทัดบนแต่มาทีหลังจะแซงงานที่มาก่อน ทั้งที่ FCFS ต้องเป็น "มาก่อนได้ก่อน" Priority tie-break ก็มีปัญหาเดียวกัน
+
+        แก้ได้โดยเปลี่ยน comparator เป็น arrivalMs แล้วค่อย sequence ซึ่งเป็น field final ทั้งคู่ จึงปลอดภัยเมื่อ comparator ถูกเรียกภายใต้ lock ของคิว
     ```
