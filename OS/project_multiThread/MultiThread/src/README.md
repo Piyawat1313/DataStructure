@@ -16,3 +16,4 @@ java Main workloads/jobs_standard.csv priority 3 1 2
 
 ## ข้อจำกัดที่ควรรู้
 - Monitor อ่าน ready/running/completed แยกกัน 3 จุด เป็น thread-safe แต่ละตัว ไม่ใช่ atomic snapshot ทั้งชุดพร้อมกัน 100% คลาดเคลื่อนได้เล็กน้อยระดับ ms
+- การรันแบบ java Main.java เป็นการสร้าง Overhead และ Initial CPU / Memory Load ในช่วงเริ่มต้น ทำให้ Timing จังหวะการ context Switch มีความช้าของ Thread เล็กน้อย เกิดการเปลี่ยนลำดับ worker thread แย่งกันเข้าคิวและทรัพยากรณ์
