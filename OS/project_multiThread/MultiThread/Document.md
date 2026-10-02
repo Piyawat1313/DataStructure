@@ -171,7 +171,7 @@ Exception in thread "main" java.io.FileNotFoundException: \data\jobs_single.csv 
         ```
 
 ## วิธี redirect log ลงไฟล์
-1. สร้างฌฟลเดอร์ logs ภายในฌฟลเดร์ src
+1. สร้างโฟลเดอร์ logs ภายในฌฟลเดร์ src
 2. รันคำสั่ง java Main workloads/jobs_standard.csv fcfs 3 1 2 > logs\ชื่อไฟล์.log มันจะทำการเขียนไฟล์ .log ในโฟลเดอร์ logs
 3. วิธีนับ jobCompleted ใช้คำสั่ง
     ```bash
@@ -436,6 +436,14 @@ Exception in thread "main" java.io.FileNotFoundException: \data\jobs_single.csv 
 - Comparator: Functional Interface กำหนดเกณฑ์การเปรียบเทียบและการจัดเรียง Objects 2 ชึ้น
 
 - BlockingQueue: Queue อินเทอร์เฟซที่ออกแบบมาสำหรับงาน Multithreading เพิ่มความสามารถในการรอ อัตโนมัติเมื่อคิวว่าง 
+
+- volatile: keyword ที่ใช้กำกับตัวแปรเพื่อบอก JVM และ CPU ว่า ตัวแปรนี้อาจถูกอ่านและแก้ไขโดยหลาย Thread พร้อมๆกันห้ามทำ Caching ไว้ใน CPU Cache ของ Thread ให้ไปอ่านและเขียนตรงจาก Shared Memory เสมอ
+
+## สถาปัตยกรรม Thread
+![Thread Architechture](/MultiThread/src/image/Thread-Architechture.png)
+
+## โครงสร้างข้อมูล
+![Data Structure](/MultiThread/src/image/Data%20Structures.png)
 
 
 ## Code สำรองกรณีต้องแก้ 
