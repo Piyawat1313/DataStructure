@@ -443,7 +443,7 @@ Exception in thread "main" java.io.FileNotFoundException: \data\jobs_single.csv 
 ![Thread Architechture](/MultiThread/src/image/Thread-Architechture.png)
 
 ## โครงสร้างข้อมูล
-![Data Structure](/MultiThread/src/image/Data%20Structures.png)
+![Data Structure](/MultiThread/src/image/Data Structures.png)
 
 
 ## Code สำรองกรณีต้องแก้ 
