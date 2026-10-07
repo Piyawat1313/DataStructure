@@ -217,34 +217,35 @@ Exception in thread "main" java.io.FileNotFoundException: \data\jobs_single.csv 
 ## ผลที่ได้ 
 |#|Workload / Policy|Workers|Printer|DB|avg WatingTime|avg Turnaround Time|Throughput|avg RW|
 |----|-----|----|-----|-----|-----|-----|-----|-----|
-|1|standard / FCFS |3|1|2|2957|5462|1.14|72|
-|2|standard / Priority|3|1|2|2325.00|4958.00|1.08|265.00|
-|3|standard / Priority|1|1|2|8504|10955|0.41|1.00|
-|4|standard / Priority|5|1|2|1130|4096|1.29|728|
-|5|printer / Priority|3|1|2|1140|4250|0.80|1618|
-|6|printer / Priority|3|2|2|757|2539|1.44|296|
-|7|standard / Priority|3|1|2|2339|4982|1.08|264|
+|1|standard / FCFS |3|1|2|2957|5462|1.14|73|
+|2|standard / Priority|3|1|2|2326.00|4960.00|1.08|260|
+|3|standard / Priority|1|1|2|8533|10989|0.41|1.00|
+|4|standard / Priority|5|1|2|1125|4083|1.29|725|
+|5|printer / Priority|3|1|2|1141|4247|0.79|1614|
+|6|printer / Priority|3|2|2|760|2547|1.42|298|
+|7|standard / Priority|3|1|2|2331|4967|1.08|259|
 
 ## priority VS FCFS (Scheduling)
 - Priority WT = timestamp(JOB_STARTED) − timestamp(JOB_ARRIVED)
 - FCFS WT = timestamp(JOB_STARTED) − timestamp(JOB_ARRIVED)
 - ผลต่าง = Priority WT - FCFS WT
-- ถ้าค่าผลต่างติดลบแปลว่า มีผลกระทบ
-- ถ้าผลต่างเป็นบวกแปลว่า ได้ประโยชน์
+- ถ้าค่าผลต่างติดลบแปลว่า ได้ประโยชน์ Priority รอน้อยกว่า FCFS
+- ถ้าผลต่างเป็นบวกแปลว่า เสียประโยชน์  Priority รอนานกว่า FCFS
+- ถ้าผลต่าง <= 5 แปลว่าไม่ต่างกัน
 
 
 |Job|priority|Arrived|FCFS start|FCFS WT|Priority start|Priority WT|ผลต่าง priority - FCFS|
 |-----|------|-----|-------|----|----|-----|-----|
-|j01|5|29|36|6|34|5|+1|
-|j02|5|129|133|3|132|3|0|
-|j03|5|229-230|231|1|229|0|+1|
-|j04|5|329|2541|2211|5382|5053|-2842|
-|j05|5|429|2734|2304|5586|5157|-2853|
-|j06|4|529-535|3756|3221|5288|4759|-1538|
-|j07|1|1030-1031|5952|4921|2546|1516|+3405|
-|j08|1|1228-1231|6438|5207|2731|1503|+3704|
-|j09|1|1431-1430|7163|5733|3773|2342|+3391|
-|j10|2|1629-1630|7571|5941|4676|3047|+2894|
+|j01|5|30|36|6|37|6|0|
+|j02|5|128|129|1|134|3|+2|
+|j03|5|228|228|0|231|0|0|
+|j04|5|328|2550|2222|5377|5046|+2824|
+|j05|5|427|2740|2313|5564|5134|+2821|
+|j06|4|535|3747|3212|5267|4726|+1514|
+|j07|1|1027|5962|4935|2538|1507|-3428|
+|j08|1|1227|6467|5240|2734|1502|-3738|
+|j09|1|1427|7162|5735|3750|2319|-3416|
+|j10|2|1637|7591|5954|4655|3025|-2929|
 
 #### job ไหนได้ประโยชน์
 - ANS: j07, j08, j09, j10
@@ -261,13 +262,13 @@ Exception in thread "main" java.io.FileNotFoundException: \data\jobs_single.csv 
 
 |Worker|Throughput|Average Resource Wait Time|สัดส่วน|
 |-----|-----------|--------------------------|------|
-|1|0.41|1.00|0.41|
-|3|1.08|259.00|88%|
-|5|1.29|725.00|72%|
+|1|0.41|1.00|100%|
+|3|1.08|260.00|88%|
+|5|1.29|725.00|63%|
 
 - สรุป:
     ```text
-        เมื่อจำนวน worker 3-5 มีสัดส่วนที่น้อยลงมา เพราะว่า ระบบเริ่มเข้าใกล้ resource-bound มากกว่า worker-bound — ยิ่งเพิ่ม Worker จำนวน Job ที่พร้อมทำงานพร้อมกันยิ่งมาก แต่จำนวน permit ของ PRINTER (=1) และ DATABASE (=2) ยังคงเดิม ทำให้เกิดการแย่ง resource รุนแรงขึ้น สังเกตได้จาก avg Resource Wait ที่พุ่งขึ้นจาก 259ms เป็น 725ms (เกือบ 3 เท่า)
+        เมื่อจำนวน worker 3-5 มีสัดส่วนที่น้อยลงมา เพราะว่า ระบบเริ่มเข้าใกล้ resource-bound มากกว่า worker-bound — ยิ่งเพิ่ม Worker จำนวน Job ที่พร้อมทำงานพร้อมกันยิ่งมาก แต่จำนวน permit ของ PRINTER (=1) และ DATABASE (=2) ยังคงเดิม ทำให้เกิดการแย่ง resource รุนแรงขึ้น สังเกตได้จาก avg Resource Wait ที่พุ่งขึ้นจาก 260ms เป็น 725ms (เกือบ 3 เท่า)
     ```
 
 
@@ -277,11 +278,11 @@ Exception in thread "main" java.io.FileNotFoundException: \data\jobs_single.csv 
 
 |printer|avg Resource Wait Time|Throughput|
 |----------|----------------------|----------|
-|1|1611.00|0.80|
-|2|298.00|1.43|
+|1|1614.00|0.79|
+|2|298.00|1.42|
 
-- % ที่ลดลงของ avg RW = 82%
-- % ที่เพิ่มของ Throughput = 79%
+- % ที่ลดลงของ avg RW = 81.5%
+- % ที่เพิ่มของ Throughput = 79.7%
 
 - สรุป จุดคอขวดของระบบย้ายไปอยู่ที่ใด
     ```text
@@ -293,7 +294,7 @@ Exception in thread "main" java.io.FileNotFoundException: \data\jobs_single.csv 
 
 - สรุป avg Resource Wait and Throughput เปลี่ยนอย่างไร
     ```text
-        เมื่อเพิ่มจำนวน printer permit จาก 1 เป็น 2 avg Resource Wait Time ลดลงจาก 1611.00 จนถึง 298.00 คิดเป็น % ได้ 82% ของการลดลงของ avg RW ในส่วนของ Throughput เพิ่มขึ้นจาก 0.80 ถึง 1.43 คิดเป็นเปอรืเซ็นที่เพิ่มได้ 79%
+        เมื่อเพิ่มจำนวน printer permit จาก 1 เป็น 2 avg Resource Wait Time ลดลงจาก 1614.00 จนถึง 298.00 คิดเป็น % ได้ 81.5% ของการลดลงของ avg RW ในส่วนของ Throughput เพิ่มขึ้นจาก 0.79 ถึง 1.42 คิดเป็นเปอรืเซ็นที่เพิ่มได้ 79.7%
     ```
 
 ## คำถาม Demo
@@ -308,8 +309,8 @@ Exception in thread "main" java.io.FileNotFoundException: \data\jobs_single.csv 
 2. FCFS กับ Priority ทำให้ Job กลุ่มใดได้ประโยชน์หรือเสียประโยชน์จาก jobs_standard.csv? ให้อ้างอิง Waiting Time และลำดับ START ใน log และอธิบายด้วยว่าเหตุใด Priority Scheduling ในการทดลองนี้อาจมี Throughput ต่ำกว่า FCFS แม้ค่าเฉลี่ย Waiting Time จะดีกว่า  
     - ANS:
         ```text
-            j07, j08, j09, j10 กลุ่มนี้ได้ประโยชน์ WT ลดลงมาก
-            กลุ่มที่เสียประโยชน์มี j04, j05, j06 WT เพิ่มมากขึ้น
+            j04, j05, j06 กลุ่มนี้ได้ประโยชน์ WT ลดลงมาก
+            กลุ่มที่เสียประโยชน์มี j07, j08, j09, j10 WT เพิ่มมากขึ้น
 
             FCFS: ลำดับ JOB_STARTED เรียงตาม arrival
             Priority: ลำดับ JOB_STARTED จริงในไฟล์ log คือ J01,J02,J03 (เริ่มพร้อมกันตอน worker ว่าง)
@@ -337,10 +338,10 @@ Exception in thread "main" java.io.FileNotFoundException: \data\jobs_single.csv 
     - ตารางเปรียบเทียบ
         | |แถว2|แถว 7|ผลต่าง|
         |----|-----|----|----|
-        |avg WT|2325.00|2339|14 ms|
-        |avg TAT|4958.00|4982|24 ms|
+        |avg WT|2326.00|2339|13 ms|
+        |avg TAT|4960.00|4982|22 ms|
         |Throughput|1.08|1.08|0 ms|
-        |avg RW|265.00|264.00|1 ms|
+        |avg RW|260.00|264.00|4 ms|
 
 ## Poison pill
 - หลักการ:

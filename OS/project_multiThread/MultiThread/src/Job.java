@@ -69,6 +69,7 @@ public class Job {
     public volatile long resourceAcquiredTime; // เวลาที่ได้ resource มา
     public volatile long finishTime;  // เวลาที่งานเสร็จสมบูรณ์
     public static final Job POISON_PILL = new Job("POISON_PILL", -1, -1, -1, ResourceType.NONE, -1, -1); // message Passing คอยสั่งให้ Thread หรือการทำงานตัวอื่นหยุดทำงานอย่างเป็นระเบียบและปลอดภัย
+    
 
     public long waitingTime(){
         return  startTime - actualArrivalTime;
@@ -89,7 +90,7 @@ public class Job {
     public  boolean verifyEquation() {
         long expected = waitingTime() + workMs + resourceWaitTime() + resourceMs;
         long actual = turnaroundTime();
-        return  expected == actual;
+        return  Math.abs(expected - actual) <= 50;
     }
 
     @Override

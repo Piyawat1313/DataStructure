@@ -112,11 +112,7 @@ public class Main {
 
         // ---------- 7. สรุปผล ----------
         // TODO: หา makespan = เวลาที่งานชิ้นสุดท้ายเสร็จ (ใช้ logger.now())
-        long last = 0;
-        for (Job job : statistics.completedJobs) {
-            last = Math.max(last, job.finishTime);
-        }
-        long makespan = last - simulationStart;
+        long makespan = logger.now();
 
         // TODO: เรียก statistics.printSummary(jobs, makespanMs)
         statistics.printSummary(jobs, makespan);

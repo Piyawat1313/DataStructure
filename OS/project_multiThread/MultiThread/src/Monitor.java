@@ -49,7 +49,7 @@ public class Monitor extends Thread {
                 // ไม่ใช่ true atomic snapshot 
                 int ready = readyQueue.size(); // ต้อง thread-safe
                 int running = runningCount.get();
-                int completed = statistics.getCompletedCount(); // ต้อง thread-safe
+                int completed = statistics.completedCount(); // ต้อง thread-safe
 
                 logger.monitor(ready, running, completed, resourceManager.status());
 

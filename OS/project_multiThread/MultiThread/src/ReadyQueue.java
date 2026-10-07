@@ -1,4 +1,6 @@
 import java.util.Comparator;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 
 /**
@@ -24,12 +26,16 @@ public class ReadyQueue {
 
     // TODO: เก็บนโยบาย (Config.Policy) และโครงสร้างข้อมูลที่ใช้เก็บงาน
 
-    public final PriorityBlockingQueue<Job> queue;
+    public final BlockingQueue<Job> queue;
 
     public ReadyQueue(Config.Policy policy) {
         // TODO
-        Comparator<Job> comparator = buildComparator(policy);
-        this.queue = new PriorityBlockingQueue<>(11, comparator);
+        if (policy == Config.Policy.PRIORITY) {
+            this.queue = new PriorityBlockingQueue<>(11, buildComparator(policy));
+        }
+        else{
+            this.queue = new LinkedBlockingQueue<>();
+        }
         
     }
 
@@ -37,14 +43,14 @@ public class ReadyQueue {
         Comparator<Job> base;
 
         // FCFS: ใครมาก่อนได้ก่อน ใช้ sequence เป็นตัวตัดสิน
-        if (policy == Config.Policy.FCFS) {
-            base = Comparator.comparingInt(Job -> Job.sequence);
-        }
-        else{
+        if (policy == Config.Policy.PRIORITY) {
             // Priority: priority น้อย = สำคัญมาก ถ้าเท่ากัน tie-break ด้วย sequence
             base = Comparator
-                        .comparingInt((Job job) -> job.priority)
-                        .thenComparingInt(job -> job.sequence);            
+                    .comparingInt((Job job) -> job.priority)
+                    .thenComparingInt(job -> job.sequence);
+                }
+                else{
+                    base = Comparator.comparing(Job -> Job.sequence);       
         }
         // pill ต้องอยู่ท้ายสุดเสมอ ไม่ว่านโยบายใด
         return (a, b) -> {
