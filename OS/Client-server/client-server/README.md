@@ -232,3 +232,9 @@
         ```text
             Header เขียนผ่าน OutputStream (มี buffer) ส่วน payload ใน NIO ไปผ่าน channel ตรง ถ้าไม่ flush ก่อน header อาจไปถึง client หลัง payload ทำให้ protocol พัง
         ```
+
+# ระบบของ Client-Server
+![UMLServer](./src/image/Server-Client.png)
+
+# ขั้นตอนการทำงานของระบบ
+![Systems](./src/image/System%20Server.png)
