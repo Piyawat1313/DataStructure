@@ -171,7 +171,7 @@ Exception in thread "main" java.io.FileNotFoundException: \data\jobs_single.csv 
         ```
 
 ## วิธี redirect log ลงไฟล์
-1. สร้างโฟลเดอร์ logs ภายในฌฟลเดร์ src
+1. สร้างโฟลเดอร์ logs ภายในโฟลเดร์ src
 2. รันคำสั่ง java Main workloads/jobs_standard.csv fcfs 3 1 2 > logs\ชื่อไฟล์.log มันจะทำการเขียนไฟล์ .log ในโฟลเดอร์ logs
 3. วิธีนับ jobCompleted ใช้คำสั่ง
     ```bash
@@ -309,22 +309,33 @@ Exception in thread "main" java.io.FileNotFoundException: \data\jobs_single.csv 
 2. FCFS กับ Priority ทำให้ Job กลุ่มใดได้ประโยชน์หรือเสียประโยชน์จาก jobs_standard.csv? ให้อ้างอิง Waiting Time และลำดับ START ใน log และอธิบายด้วยว่าเหตุใด Priority Scheduling ในการทดลองนี้อาจมี Throughput ต่ำกว่า FCFS แม้ค่าเฉลี่ย Waiting Time จะดีกว่า  
     - ANS:
         ```text
-            j04, j05, j06 กลุ่มนี้ได้ประโยชน์ WT ลดลงมาก
-            กลุ่มที่เสียประโยชน์มี j07, j08, j09, j10 WT เพิ่มมากขึ้น
+            กลุ่มที่ได้ประโยชน์: j07, j08, j09, j10 (priority 1-2) WT ลดลง 2,929-3,738 ms
+            กลุ่มที่เสียประโยชน์: j04, j05, j06 (priority 4-5) WT เพิ่มขึ้น 1,514-2,824 ms
+            กลุ่มที่ไม่ต่าง: j01, j02, j03 เริ่มทันทีเพราะ worker ว่าง (ผลต่าง ≤ 5 ms)
 
-            FCFS: ลำดับ JOB_STARTED เรียงตาม arrival
-            Priority: ลำดับ JOB_STARTED จริงในไฟล์ log คือ J01,J02,J03 (เริ่มพร้อมกันตอน worker ว่าง)
-            J07 (start ที่ 2546ms, priority=1) J08 (2731ms) J09 (3773ms) J10 (4676ms) → แล้วค่อยมาถึง J04 (5382ms) และ J06 (5288ms), J05 (5586ms)
-            priority ต่ำกว่า=สำคัญกว่า ได้ไปก่อนไม่ว่าจะมาถึงก่อนหรือหลัง
+            ลำดับ START ใน Priority log: J01, J02, J03, J07 (2538), J08 (2734), J09 (3750),
+            J10 (4655), J06 (5267), J04 (5377), J05 (5564) ms
+            job priority สูงกว่าแซงคิว j04-j06 แม้มาถึงทีหลัง
 
-            Priority ทำให้ WT ดีขึ้นในภาพรวมของการรอคิวก่อนเริ่มงาน แต่ไปสร้างปัญหาใหม่คือ resource contention ที่หนักขึ้นในช่วงที่ Job priority เดียวกันถูกจัดให้ชนกัน
+            Avg WT ของ Priority ดีกว่า (2326 vs 2961 ms) แต่ Throughput ต่ำกว่า (1.08 vs 1.14 jobs/sec)
+            เพราะ Priority ไม่ดูความยาวงาน job ยาว (j04, j05, j06) ถูกเลื่อนไปเริ่มท้ายสุด
+            ทำให้ job สุดท้ายเสร็จที่ 9277 ms (FCFS 8779 ms) และช่วงท้ายเหลือ worker ทำงานตัวเดียว
+            นอกจากนี้ j07/j08 แย่ง PRINTER ตัวเดียวกัน (j08 รอ 1307 ms) ทำให้ Avg Resource Wait สูงขึ้นเป็น 260 ms (FCFS 73 ms)
+            Throughput วัดจากเวลารวมที่ job สุดท้ายเสร็จ ไม่ใช่เวลารอเฉลี่ย
         ```
 
 
 3. เมื่อเพิ่ม Printer permit จาก 1 เป็น 2 แล้ว avg Resource Wait และ Throughput เปลี่ยนอย่างไร และจุดคอขวดของระบบย้ายไปอยู่ที่ใด?
     - ANS:
         ```text
-            เมื่อเปลี่ยน printer จาก 1 เป็น 2 ทำให้อัตราส่วนของ avg resource wait Time ลดลงมาถึง 82 % แต่ Throughput อัตราส่วนพิ่มขึ้นมาถึง 79% นั่นหมายความว่าจุดคอขวดยังอยู่ printer เหมือนเดิม ไม่ได้ย้ายไปที่อื่น สังเกตได้จาก avg Resource Wait Time = 298 ซึ่งยังไม่เข้าใกล้ 0 แต่เบาลงกว่าเดิมถึง 82% 
+            เมื่อเพิ่ม Printer permit จาก 1 เป็น 2 Avg Resource Wait ลดจาก 1614 เป็น 298 ms (ลด ~82%)
+            และ Throughput เพิ่มจาก 0.79 เป็น 1.42 jobs/sec (เพิ่ม ~80%)
+            คอขวดยังอยู่ที่ Printer เพราะ MONITOR แสดง printer=2/2 ต่อเนื่องที่ 1041-3057 ms
+            และยังมี job รอคิว (P03 รอ 1021 ms, P04 รอ 764 ms)
+            ทุก job ใช้ Printer 1200 ms รวม 7200 ms หาร 2 permit ได้ขอบล่าง ~3600 ms
+            ซึ่งใกล้เวลาจริง 4221 ms
+            นอกจากนี้ job ถือ worker ไว้ขณะรอ printer ทำให้ worker ทั้ง 3 ตัวติดอยู่
+            ช่วงท้าย printer เหลือ 1/2 จึงเริ่มไม่ใช่คอขวดแล้ว
         ```
 
 4. เปรียบเทียบแถว 2 กับแถว 7: เหตุใด workloadและชุดค่าที่ใช้รันเหมือนเดิม จึงอาจให้เวลาใน logลำดับเหตุการณ์และค่าที่วัดต่างกันเล็กน้อย?
@@ -336,12 +347,12 @@ Exception in thread "main" java.io.FileNotFoundException: \data\jobs_single.csv 
             ตัว algorithm/tie-break rule ยังคง deterministic เป๊ะ — ถ้า Job สอง priority เท่ากันมาถึง Ready Queue พร้อมกัน กติกา tie-break (จาก sequence) จะเลือกตัวเดิมเสมอไม่ว่ารันกี่รอบ สิ่งที่ไม่ deterministic คือ "เวลา" ที่แต่ละ event เกิดขึ้น ไม่ใช่ "ผลลัพธ์ของกติกา"
         ```
     - ตารางเปรียบเทียบ
-        | |แถว2|แถว 7|ผลต่าง|
-        |----|-----|----|----|
-        |avg WT|2326.00|2339|13 ms|
-        |avg TAT|4960.00|4982|22 ms|
-        |Throughput|1.08|1.08|0 ms|
-        |avg RW|260.00|264.00|4 ms|
+        | |แถว2|แถว 7|ผลต่าง|%|
+        |----|-----|----|----|----|
+        |avg WT|2326.00|2339|13 ms| 0.6%|
+        |avg TAT|4960.00|4982|22 ms|0.4 %|
+        |Throughput|1.08|1.08|0 ms|0%|
+        |avg RW|260.00|264.00|4 ms|1.5%|
 
 ## Poison pill
 - หลักการ:
@@ -440,11 +451,18 @@ Exception in thread "main" java.io.FileNotFoundException: \data\jobs_single.csv 
 
 - volatile: keyword ที่ใช้กำกับตัวแปรเพื่อบอก JVM และ CPU ว่า ตัวแปรนี้อาจถูกอ่านและแก้ไขโดยหลาย Thread พร้อมๆกันห้ามทำ Caching ไว้ใน CPU Cache ของ Thread ให้ไปอ่านและเขียนตรงจาก Shared Memory เสมอ
 
+- LinkedBlockingQueue: thread-safe และเป็น blocking ใช้เก็บข้อมูลแบบ FIFO (เข้าก่อนออกก่อน) เพื่อส่งงานระหว่าง thread โดยไม่ต้องเขียน lock เอง
+
+
 ## สถาปัตยกรรม Thread
 ![Thread Architechture](./src/image/Thread-Architechture.png)
 
 ## โครงสร้างข้อมูล
 ![Data Structure](./src/image/Data%20Structures.png)
+
+
+## โครงสร้างภาพรวมของโปรเจค
+![MultiThreads](./src/image/MultiThreads.png)
 
 
 ## Code สำรองกรณีต้องแก้ 
