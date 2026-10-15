@@ -266,20 +266,20 @@
 
 
 # เกร็ดความรู้
-1. ->: เอาไว้ทำหน้าที่จับคู่กับเคสที่ตรงกันมักใช้กับ switch case
-2. StandardCharsets.ISO_8859_1: ค่าคงที่ใน class ใช้ระบุการเข้ารหัสอักขระ เอาไว้อ่าน Header ทีละ 1 byte
-3. byte[] buf = new byte[1 << 20];: สร้างพื้นที่เก็บหน่วยความจำ ขนาด 1 MB 
-    - 1 << 20: เลื่อนบิตไปทางซ้าย Bitwise Left Shift
-4. & 0xFF: ระบบเลขฐาน 16 มีเพื่อเปลี่ยน byte  เป็นค่า Unsigned 0 - 255 
-5. :: --> Method Reference Operator ใช้ส่งอ้างอิงไปยัง methodที่มีอยู่แล้วโดยตรง 
-6. allocate(1): คำสั่งจองพื้นที่บน Heap memory 1 byte  
-7. toAbsolutePath(): แปลง relative path เป็น absolute Path
-8. normalize(): จัดรูป Pathและทำความสะอาด Path
-9. bind(new InetSocketAddress(port)): คือการผูกและจอง Port บนเครื่อง server เพื่อรองรับการเชื่อมต่อจาก client
-10. newVirtualThreadPerTaskExecutor(): ใช้สำหรับสร้าง ExecutorService ทุกๆงานที่ส่งเข้ามาถูกจับไปแยกรันบน Virtual Thread ตัวใหม่เสมอ
-11. FixedThreadPool: ต้องเลือกจำนวน ThreadPool เอง
-12. VirtualThread: มีความเบา สามารถสร้างเท่าไรก็ได้ไม่เปลือง memory
-13. zero copy: ส่งข้อมูลโดยที่ไม่ต้อง copy ข้อมูลลง memory ลดการสลับโหมดระหว่าง user กับ Kernel
-14. Traditional I/O: วิธีอ่านเขียนข้อมูลแบบดั้งเดิมของ java โดยใช้ InputStream / OutputStream / byte[] เป็นตัวกลาง ข้อมูลต้องมาพักใน memory ของโปรแกรมก่อน
+1. `->:` เอาไว้ทำหน้าที่จับคู่กับเคสที่ตรงกันมักใช้กับ switch case
+2. `StandardCharsets.ISO_8859_1:` ค่าคงที่ใน class ใช้ระบุการเข้ารหัสอักขระ เอาไว้อ่าน Header ทีละ 1 byte
+3. `byte[] buf = new byte[1 << 20];:` สร้างพื้นที่เก็บหน่วยความจำ ขนาด 1 MB 
+4. `1 << 20:` เลื่อนบิตไปทางซ้าย Bitwise Left Shift
+5. `& 0xFF:` ระบบเลขฐาน 16 มีเพื่อเปลี่ยน byte  เป็นค่า Unsigned 0 - 255 
+6. `:: -->` Method Reference Operator ใช้ส่งอ้างอิงไปยัง methodที่มีอยู่แล้วโดยตรง 
+7. `allocate(1):` คำสั่งจองพื้นที่บน Heap memory 1 byte  
+8. `toAbsolutePath():` แปลง relative path เป็น absolute Path
+9. `normalize():` จัดรูป Pathและทำความสะอาด Path
+10. `bind(new InetSocketAddress(port)):` คือการผูกและจอง Port บนเครื่อง server เพื่อรองรับการเชื่อมต่อจาก client
+11. `newVirtualThreadPerTaskExecutor():` ใช้สำหรับสร้าง ExecutorService ทุกๆงานที่ส่งเข้ามาถูกจับไปแยกรันบน Virtual Thread ตัวใหม่เสมอ
+12. `FixedThreadPool:` ต้องเลือกจำนวน ThreadPool เอง
+13. `VirtualThread:` มีความเบา สามารถสร้างเท่าไรก็ได้ไม่เปลือง memory
+14. `zero copy:` ส่งข้อมูลโดยที่ไม่ต้อง copy ข้อมูลลง memory ลดการสลับโหมดระหว่าง user กับ Kernel
+15. `Traditional I/O:` วิธีอ่านเขียนข้อมูลแบบดั้งเดิมของ java โดยใช้ InputStream / OutputStream / byte[] เป็นตัวกลาง ข้อมูลต้องมาพักใน memory ของโปรแกรมก่อน
 
  
