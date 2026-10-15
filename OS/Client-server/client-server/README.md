@@ -23,6 +23,24 @@
         java Client localhost <port> <ชื่อไฟล์> <worker> <trad/nio> <folder>
     ```
 
+### Demo
+1. ถ้าอยากรู้ว่าใน Server มีไฟล์อะไรบ้าง
+    ```bash
+        java Demo List
+    ```
+2. ถ้าอยากรู้ว่าขนาดของไฟล์
+    ```bash
+        java Demo info <nameFile>
+    ```
+3. ถ้าอยากรู้ว่าแต่ละ workers แบ่งช่วงยังไง
+    ```bash
+        java Demo get <name file> <workers>
+    ```
+4. ตรวจสอบ SHA256 ตรงกับ Server
+    ```bash
+        java Demo Hash <name file>
+    ```
+
 ## ขั้นตอนการ Run คนละเครื่อง
 1. ต้องเชื่อม internet หรือ hotspot ให้ server/client อยู่ในวงเน็ตเดียวกัน
 2. เครื่อง server ต้องเพิ่มกฎ firewall บน powershell Admin โดยใช้คำสั่ง
@@ -258,4 +276,10 @@
 7. toAbsolutePath(): แปลง relative path เป็น absolute Path
 8. normalize(): จัดรูป Pathและทำความสะอาด Path
 9. bind(new InetSocketAddress(port)): คือการผูกและจอง Port บนเครื่อง server เพื่อรองรับการเชื่อมต่อจาก client
+10. newVirtualThreadPerTaskExecutor(): ใช้สำหรับสร้าง ExecutorService ทุกๆงานที่ส่งเข้ามาถูกจับไปแยกรันบน Virtual Thread ตัวใหม่เสมอ
+11. FixedThreadPool: ต้องเลือกจำนวน ThreadPool เอง
+12. VirtualThread: มีความเบา สามารถสร้างเท่าไรก็ได้ไม่เปลือง memory
+13. zero copy: ส่งข้อมูลโดยที่ไม่ต้อง copy ข้อมูลลง memory ลดการสลับโหมดระหว่าง user กับ Kernel
+14. Traditional I/O: วิธีอ่านเขียนข้อมูลแบบดั้งเดิมของ java โดยใช้ InputStream / OutputStream / byte[] เป็นตัวกลาง ข้อมูลต้องมาพักใน memory ของโปรแกรมก่อน
+
  
